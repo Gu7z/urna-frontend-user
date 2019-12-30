@@ -1,4 +1,5 @@
 import React from 'react';
+import Operations from './operations'
 
 const Card = ({setName, pessoa, Vote}) => {
 
@@ -10,6 +11,7 @@ const Card = ({setName, pessoa, Vote}) => {
           <p className="card-text">{pessoa.desc}</p>
         </div>
         <button onClick={() => {
+          Operations.postVote({id: pessoa._id})
           Vote( true )
           setName(pessoa.name)
         }} style={{backgroundColor: '#19882c', color: 'white'}} className="card-footer">

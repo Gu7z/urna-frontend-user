@@ -4,7 +4,14 @@ import '../App.css';
 const Operations = {
     getPeople: async () => {
         var result;
-        await axios.get('http://192.168.1.4:3001').then(
+        await axios.get('http://localhost:3001').then(
+            data => result = data.data
+        )
+        return result
+    },
+    postVote: async (obj) => {
+        var result;
+        await axios.post('http://localhost:3001/vote', obj).then(
             data => result = data.data
         )
         return result
