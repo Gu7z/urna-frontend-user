@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Cards from './components/cards'
 import Concluded from './components/concluded'
 import Operations from './components/operations'
+import socketIOClient from "socket.io-client";
 import './App.css';
+
+const endPoint = 'http://localhost:3001'
+
+const socket = socketIOClient(endPoint)
 
 function App() {
 
+  const [nomeEleitor, setNome] = useState();
+
   const [people, getPeople] = useState();
 
-  if (!people) {
+  useEffect( () => {
+    socket.on()
     Operations.getPeople().then(data=>{getPeople(data)})
-  }
+  }, [] )
+
+  socket.on('foi', (data) => {
+    console.log('data')
+    setNome(data.nome)
+  })
 
   const [hasVoted, Vote] = useState(false);
   const [name, setName] = useState('');
@@ -29,11 +42,23 @@ function App() {
 
   return (
     <div className="App">
-      <div className="cards" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }} > 
-        {
-          hasVoted ? (<Concluded name={name} />) : (<RenderPessoa/>)
-        }
-      </div>
+      {
+        nomeEleitor ? 
+        (
+          <div>
+            <h1>
+              Ola, {nomeEleitor}.
+            </h1>
+            <div className="cards" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }} > 
+              {
+                hasVoted ? (<Concluded name={name} />) : (<RenderPessoa/>)
+              }
+            </div>
+          </div>
+        ):(
+          null 
+        )
+      }
     </div>
   );
 }
