@@ -1,7 +1,9 @@
 import React from 'react';
 import Operations from './operations'
 
-const Card = ({setName, pessoa, Vote}) => {
+const Card = ({votou, setName, pessoa, Vote}) => {
+
+  console.log(pessoa)
 
   return (
       <div className="card" style={{maxWidth: '180px', margin: '15px'}}>
@@ -11,6 +13,7 @@ const Card = ({setName, pessoa, Vote}) => {
           <p className="card-text">{pessoa.desc}</p>
         </div>
         <button onClick={() => {
+          votou()
           Operations.postVote({id: pessoa._id})
           Vote( true )
           setName(pessoa.name)

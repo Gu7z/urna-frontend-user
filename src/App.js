@@ -5,6 +5,12 @@ import Operations from './components/operations'
 import socketIOClient from "socket.io-client";
 import './App.css';
 
+/**
+    1 - Grafico
+    2 - Logico
+    3 - Input
+*/ 
+
 const endPoint = 'http://localhost:3001'
 
 const socket = socketIOClient(endPoint)
@@ -12,27 +18,33 @@ const socket = socketIOClient(endPoint)
 function App() {
 
   const [nomeEleitor, setNome] = useState();
-
   const [people, getPeople] = useState();
+  const [hasVoted, Vote] = useState(false);
+  const [name, setName] = useState('');
 
   useEffect( () => {
-    socket.on()
+    socket.on('votar', (data) => {
+      setNome(data.nome)
+    })
+    socket.on('fimVotar', () => {
+      setTimeout(() => {
+        Vote(false)
+        setName('')
+        setNome('')
+      }, 3000);
+    })
     Operations.getPeople().then(data=>{getPeople(data)})
   }, [] )
 
-  socket.on('foi', (data) => {
-    console.log('data')
-    setNome(data.nome)
-  })
-
-  const [hasVoted, Vote] = useState(false);
-  const [name, setName] = useState('');
+  const votou = () => {
+    socket.emit('fim')
+  }
 
   const RenderPessoa = () => {
     if (people) {
       return(
         people.map(data => {    
-          return <Cards setName={setName} Vote={Vote} key={data._id} pessoa={data} />
+          return <Cards votou={votou} setName={setName} Vote={Vote} key={data._id} pessoa={data} />
         })
       )
     }else{
